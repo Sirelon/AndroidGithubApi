@@ -1,4 +1,4 @@
-package com.sirelon.githubapi.feature.ui.repository
+package com.sirelon.githubapi.feature.repository
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
