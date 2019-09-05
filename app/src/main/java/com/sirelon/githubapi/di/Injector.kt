@@ -3,6 +3,7 @@ package com.sirelon.githubapi.di
 import android.app.Application
 import androidx.room.Room
 import com.sirelon.githubapi.database.AppDataBase
+import com.sirelon.githubapi.feature.search.RepoRepository
 import com.sirelon.githubapi.feature.search.SearchApi
 import com.sirelon.githubapi.feature.search.ui.SearchRepoViewModel
 import com.sirelon.githubapi.network.createSimpleRetrofit
@@ -52,7 +53,7 @@ object Injector {
      * Module for repository feature
      */
     private fun repositoryModule() = module {
-        factory { get<AppDataBase>().repositoryDao() }
+        single { get<AppDataBase>().repositoryDao() }
     }
 
     /**
@@ -60,6 +61,7 @@ object Injector {
      */
     private fun searchModule() = module {
         single { get<Retrofit>().create(SearchApi::class.java) }
+        factory { RepoRepository(get(), get()) }
         viewModel { SearchRepoViewModel(get()) }
     }
 }

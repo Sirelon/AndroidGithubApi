@@ -2,7 +2,7 @@ package com.sirelon.githubapi.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.sirelon.githubapi.feature.ui.repository.Repository
+import com.sirelon.githubapi.feature.repository.Repository
 import com.sirelon.githubapi.feature.repository.RepositoryDao
 
 /**
