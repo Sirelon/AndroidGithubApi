@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.sirelon.githubapi.feature.ui.home.HomeFragment"
+        android:name="com.sirelon.githubapi.feature.search.ui.SearchRepositoriesFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_search_repositories" />
 
     <fragment
         android:id="@+id/navigation_dashboard"

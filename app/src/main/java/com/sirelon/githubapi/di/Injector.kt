@@ -3,11 +3,15 @@ package com.sirelon.githubapi.di
 import android.app.Application
 import androidx.room.Room
 import com.sirelon.githubapi.database.AppDataBase
+import com.sirelon.githubapi.feature.search.SearchApi
+import com.sirelon.githubapi.feature.search.ui.SearchRepoViewModel
 import com.sirelon.githubapi.network.createSimpleRetrofit
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
+import retrofit2.Retrofit
 
 /**
  * Created on 2019-09-05 20:27 for GithubAPi.
@@ -26,6 +30,7 @@ object Injector {
             androidContext(application)
             commonModule()
             repositoryModule()
+            searchModule()
         }
     }
 
@@ -48,5 +53,13 @@ object Injector {
      */
     private fun repositoryModule() = module {
         factory { get<AppDataBase>().repositoryDao() }
+    }
+
+    /**
+     * Module for search repositories feature
+     */
+    private fun searchModule() = module {
+        single { get<Retrofit>().create(SearchApi::class.java) }
+        viewModel { SearchRepoViewModel(get()) }
     }
 }
