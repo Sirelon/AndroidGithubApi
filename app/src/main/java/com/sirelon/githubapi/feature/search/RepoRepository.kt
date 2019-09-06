@@ -25,7 +25,7 @@ class RepoRepository(private val repositoryDao: RepositoryDao, private val searc
         val queryForServer = criteria.query(query).constructQueryForServer()
 
         val sortParameter = when (criteria.sort) {
-            STARS -> "stors"
+            STARS -> "stars"
             FORKS -> "forks"
             UPDATED -> "updated"
         }

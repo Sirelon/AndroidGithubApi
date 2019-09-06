@@ -48,7 +48,7 @@ object Injector {
     private fun commonModule() = module {
         single { AppSession(androidContext()) }
 
-        single { createSimpleRetrofit(androidContext(), getProperty(BASE_URL)) }
+        single { createSimpleRetrofit(androidContext(), get(), getProperty(BASE_URL)) }
         single {
             Room.inMemoryDatabaseBuilder(
                 androidContext(),
