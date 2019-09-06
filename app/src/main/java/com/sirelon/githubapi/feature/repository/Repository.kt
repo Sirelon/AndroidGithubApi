@@ -9,6 +9,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "repository")
 data class Repository(
     @PrimaryKey
-    val id: String,
-    val name: String
+    val id: Long,
+    val name: String,
+    val description: String,
+    val starCount: Int
 )

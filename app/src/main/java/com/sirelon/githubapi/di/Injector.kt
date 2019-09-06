@@ -29,9 +29,14 @@ object Injector {
             properties(mapOf(BASE_URL to "https://api.github.com/"))
             androidLogger()
             androidContext(application)
-            commonModule()
-            repositoryModule()
-            searchModule()
+            modules(
+                listOf(
+                    commonModule(),
+                    repositoryModule(),
+                    searchModule()
+                )
+            )
+
         }
     }
 
@@ -41,11 +46,15 @@ object Injector {
     private fun commonModule() = module {
         single { createSimpleRetrofit(getProperty(BASE_URL)) }
         single {
-            Room.databaseBuilder(
+            Room.inMemoryDatabaseBuilder(
                 androidContext(),
-                AppDataBase::class.java,
-                ".githubApiDatabase"
-            )
+                AppDataBase::class.java
+            ).build()
+//            Room.databaseBuilder(
+//                androidContext(),
+//                AppDataBase::class.java,
+//                ".githubApiDatabase"
+//            ).build()
         }
     }
 

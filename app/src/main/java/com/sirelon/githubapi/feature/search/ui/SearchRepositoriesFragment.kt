@@ -2,8 +2,14 @@ package com.sirelon.githubapi.feature.search.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.observe
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sirelon.githubapi.R
 import com.sirelon.githubapi.feature.base.BaseFragment
+import com.sirelon.githubapi.feature.repository.ui.RepositoryAdapter
+import com.sirelon.githubapi.utils.onTextChange
+import kotlinx.android.synthetic.main.fragment_search_repositories.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchRepositoriesFragment : BaseFragment(R.layout.fragment_search_repositories) {
@@ -13,5 +19,17 @@ class SearchRepositoriesFragment : BaseFragment(R.layout.fragment_search_reposit
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val searchAdapter = RepositoryAdapter()
+        with(repositoriesList) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = searchAdapter
+            setHasFixedSize(true)
+            itemAnimator = DefaultItemAnimator()
+        }
+
+        viewModel.repositoryListLiveData.observe(this, searchAdapter::submitList)
+        searchInput.editText?.onTextChange {
+            viewModel.onSearchTyped(it?.toString())
+        }
     }
 }

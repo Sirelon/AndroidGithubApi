@@ -25,6 +25,10 @@ android {
     }
 }
 
+androidExtensions {
+    experimental = true
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -35,7 +39,12 @@ dependencies {
 
     // Arch Components
     // Lifecycle
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    def lifeCycleVer = "2.2.0-alpha04"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifeCycleVer"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifeCycleVer"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeCycleVer"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifeCycleVer"
+
     // Navigation
     def navVer = '2.1.0'
     implementation "androidx.navigation:navigation-fragment-ktx:$navVer"

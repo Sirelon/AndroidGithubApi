@@ -20,7 +20,7 @@ class ServerRepository(
     @SerializedName("description")
     val description: String,
     @SerializedName("stargazers_count")
-    val starsCount: Int,
+    val countOfStars: Int,
     @SerializedName("url")
     val url: String
 )
