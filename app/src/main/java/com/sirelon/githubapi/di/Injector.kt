@@ -3,6 +3,8 @@ package com.sirelon.githubapi.di
 import android.app.Application
 import androidx.room.Room
 import com.sirelon.githubapi.database.AppDataBase
+import com.sirelon.githubapi.feature.auth.AppSession
+import com.sirelon.githubapi.feature.auth.AuthAPI
 import com.sirelon.githubapi.feature.search.RepoRepository
 import com.sirelon.githubapi.feature.search.SearchApi
 import com.sirelon.githubapi.feature.search.ui.SearchRepoViewModel
@@ -44,7 +46,9 @@ object Injector {
      * Create module for common (shared) definitions, which can be used in any features
      */
     private fun commonModule() = module {
-        single { createSimpleRetrofit(getProperty(BASE_URL)) }
+        single { AppSession(androidContext()) }
+
+        single { createSimpleRetrofit(androidContext(), getProperty(BASE_URL)) }
         single {
             Room.inMemoryDatabaseBuilder(
                 androidContext(),
@@ -56,6 +60,8 @@ object Injector {
 //                ".githubApiDatabase"
 //            ).build()
         }
+
+        factory { get<Retrofit>().create(AuthAPI::class.java) }
     }
 
     /**
