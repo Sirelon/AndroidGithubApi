@@ -17,7 +17,9 @@ interface SearchApi {
         @IntRange(from = 1, to = 1000)
         page: Int,
         @Query("per_page")
-        pageLimit: Int
+        pageLimit: Int,
+        @Query("sort")
+        sortBy: String
     ): ServerSearchResults
 
 }

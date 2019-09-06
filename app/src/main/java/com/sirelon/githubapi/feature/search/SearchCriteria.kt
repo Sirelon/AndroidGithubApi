@@ -3,15 +3,22 @@ package com.sirelon.githubapi.feature.search
 /**
  * Created on 2019-09-06 15:15 for GithubAPi.
  */
-data class SearchCriteria(
-    val searchQuery: String,
+// Mutable
+class SearchCriteria(
+    var searchQuery: String,
+    var page: Int,
     val type: ByType,
-    val page: Int,
     val sort: BySort
-)
+) {
+    //
+    val pageLimit: Int = 15
+}
+
+fun SearchCriteria.page(page: Int) = apply { this.page = page }
+fun SearchCriteria.query(query: String) = apply { this.searchQuery = query }
 
 enum class ByType {
-    TITLE, DESCRIPTION
+    TITLE, DESCRIPTION, README, OWNER
 }
 
 enum class BySort {

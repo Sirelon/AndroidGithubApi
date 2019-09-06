@@ -19,6 +19,8 @@ class SearchRepositoriesFragment : BaseFragment(R.layout.fragment_search_reposit
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        subsribeForErrors(viewModel)
+
         val searchAdapter = RepositoryAdapter()
         with(repositoriesList) {
             layoutManager = LinearLayoutManager(context)

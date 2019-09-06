@@ -27,7 +27,7 @@ class SearchRepoViewModel(private val repository: RepoRepository) : BaseViewMode
                 runCatching { repository.searchRepositories(string) }
             }
 
-            result.exceptionOrNull()?.printStackTrace()
+            result.exceptionOrNull()?.let(this@SearchRepoViewModel::onError)
         }
     }
 }
