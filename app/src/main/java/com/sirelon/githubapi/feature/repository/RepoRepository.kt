@@ -1,5 +1,6 @@
 package com.sirelon.githubapi.feature.repository
 
+import android.util.Log
 import androidx.annotation.WorkerThread
 
 /**
@@ -21,6 +22,12 @@ class RepoRepository(private val repositoryDao: RepositoryDao) {
     @WorkerThread
     suspend fun remove(repository: Repository) {
         repositoryDao.delete(repository)
+    }
+
+    @WorkerThread
+    suspend fun updateRepositoriesList(list: List<Repository>) {
+        val updated = repositoryDao.updateAll(list)
+        Log.d("Sirelon", "updateRepositoriesList: updated $updated")
     }
 
 }

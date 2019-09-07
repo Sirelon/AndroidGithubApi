@@ -15,4 +15,13 @@ class SavedItemsViewModel(private val repository: RepoRepository) : BaseViewMode
             repository.remove(item)
         }
     }
+
+    fun updatePriorityForList(currentList: MutableList<Repository>) {
+        //TODO: Find way to update not whole list, but only items, which were changed
+        viewModelScope.launch(Dispatchers.IO) {
+            // Just set for ech item its position on the list
+            currentList.forEachIndexed { index, item -> item.priority = index + 1 }
+            repository.updateRepositoriesList(currentList)
+        }
+    }
 }

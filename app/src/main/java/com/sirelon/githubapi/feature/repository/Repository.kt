@@ -15,5 +15,5 @@ data class Repository(
     val starCount: Int,
     val url: String,
 
-    val priority: Int = 0
+    var priority: Int = 0
 )
