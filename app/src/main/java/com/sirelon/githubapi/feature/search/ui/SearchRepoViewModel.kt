@@ -2,6 +2,7 @@ package com.sirelon.githubapi.feature.search.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import com.sirelon.githubapi.feature.repository.RepoRepository
 import com.sirelon.githubapi.feature.repository.Repository
 import com.sirelon.githubapi.feature.search.SearchRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 /**
@@ -20,16 +22,30 @@ class SearchRepoViewModel(
     private val itemsRepository: RepoRepository
 ) : BaseViewModel() {
 
+    // just debug flag for which approach to use: flow or simple suspend methods with async
+    val searchViaFlow = true
+
     private val searchTrigger = MutableLiveData<String>()
-    //    val repositoryListLiveData = searchRepository.loadAll()
-    val repositoryListLiveData: LiveData<List<Repository>> = searchTrigger.switchMap {
-        liveData<List<Repository>>(Dispatchers.IO) {
-            val result = runCatching { searchRepository.searchRepositories(it) }
-            val list = result.getOrNull()
-            if (list != null) {
-                emit(list)
-            } else {
-                result.exceptionOrNull()?.let(this@SearchRepoViewModel::onError)
+
+    val repositoryListLiveData: LiveData<List<Repository>> =
+        searchTrigger.switchMap(this::searchByQuery)
+
+    // I need to handle errors, so convertion to LiveData I have implemeneted in ViewModel, not in repository
+    private fun searchByQuery(it: String): LiveData<List<Repository>> {
+        if (searchViaFlow) {
+            return searchRepository
+                .searchViaFlows(it)
+                .catch { onError(it) }
+                .asLiveData()
+        } else {
+            return liveData {
+                try {
+                    val list = searchRepository.searchViaAsync(it)
+                    emit(list)
+                } catch (e: Exception) {
+                    onError(e)
+                    MutableLiveData<List<Repository>>()
+                }
             }
         }
     }

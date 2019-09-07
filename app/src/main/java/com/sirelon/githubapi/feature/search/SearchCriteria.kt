@@ -4,7 +4,7 @@ package com.sirelon.githubapi.feature.search
  * Created on 2019-09-06 15:15 for GithubAPi.
  */
 // Mutable
-class SearchCriteria(
+data class SearchCriteria(
     var searchQuery: String,
     var page: Int,
     val type: ByType,
