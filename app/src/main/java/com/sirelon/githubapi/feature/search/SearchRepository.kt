@@ -44,7 +44,7 @@ class SearchRepository(private val searchApi: SearchApi) {
         return byNameFlow
             .zip(byDescriptionFlow) { list1, list2 ->
                 timings.dumpToLog()
-                list1 + list2
+                zipTwoLists(list1, list2)
             }
             .flowOn(Dispatchers.IO)
     }
@@ -65,8 +65,32 @@ class SearchRepository(private val searchApi: SearchApi) {
             timings.addSplit("DESCRIPTION:onComplete")
 
             timings.dumpToLog()
-            listByName + listByDescription
+            zipTwoLists(listByName, listByDescription)
         }
+    }
+
+    private fun zipTwoLists(
+        fromName: List<Repository>,
+        fromDescription: List<Repository>
+    ): List<Repository> {
+        val fromNameIterator = fromName.iterator()
+        val fromDescriptionIterator = fromDescription.iterator()
+        val finalSize = fromName.size + fromDescription.size
+
+        // The logic here: combine two list, where where items from name will be by with even indexes, and from description with odd.
+        // This needed, 'cause on UI it looks like first column with item from name, and second - with from description
+        return (0 until finalSize).map { index ->
+            val item = if (index % 2 == 0) {
+                fromDescriptionIterator.nextItemOrDefault { fromNameIterator.next() }
+            } else {
+                fromNameIterator.nextItemOrDefault { fromDescriptionIterator.next() }
+            }
+            item
+        }
+    }
+
+    private inline fun <T> Iterator<T>.nextItemOrDefault(default: () -> T): T {
+        return if (hasNext()) next() else default()
     }
 
     private fun callApiFlow(criteria: SearchCriteria): Flow<List<Repository>> {
