@@ -2,6 +2,9 @@ package com.sirelon.githubapi
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -12,6 +15,9 @@ import com.sirelon.githubapi.feature.auth.AppSession
 import com.sirelon.githubapi.feature.auth.AuthActivity
 import org.koin.android.ext.android.inject
 
+
+private const val ITEM_ID = 1231;
+
 class MainActivity : AppCompatActivity() {
 
     private val appSession by inject<AppSession>()
@@ -20,9 +26,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if (!appSession.isLoggedIn()) {
-            val intent = Intent(this, AuthActivity::class.java)
-            startActivity(intent)
-            finish()
+            startAuthScreen()
             return
         }
 
@@ -41,5 +45,33 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+
+    private fun startAuthScreen() {
+        val intent = Intent(this, AuthActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menu?.add(0, ITEM_ID, 1, "Logout")
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == ITEM_ID) {
+            AlertDialog.Builder(this).setMessage("Are you sure?")
+                .setPositiveButton("Yes") { _, _ -> logout() }
+                .setNegativeButton("No", null)
+                .show()
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun logout() {
+        appSession.invalidate()
+        startAuthScreen()
     }
 }
