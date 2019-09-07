@@ -11,8 +11,11 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.sirelon.githubapi.database.AppDataBase
 import com.sirelon.githubapi.feature.auth.AppSession
 import com.sirelon.githubapi.feature.auth.AuthActivity
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 
@@ -21,6 +24,7 @@ private const val ITEM_ID = 1231;
 class MainActivity : AppCompatActivity() {
 
     private val appSession by inject<AppSession>()
+    private val database by inject<AppDataBase>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +76,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun logout() {
         appSession.invalidate()
+        // Clear database.
+        // GlobalScope need to be use, 'cause we finish this activity. But it's not necessary wait that time.
+        GlobalScope.launch { database.clearAllTables() }
         startAuthScreen()
+        finish()
     }
 }
