@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sirelon.githubapi.R
 import com.sirelon.githubapi.feature.base.BaseFragment
 import com.sirelon.githubapi.feature.repository.ui.RepositoryAdapter
@@ -25,7 +25,7 @@ class SavedItemsFragment : BaseFragment(R.layout.fragment_saved_items) {
             activity?.openBrowser(it.url)
         }
         with(repositoriesList) {
-            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            layoutManager = LinearLayoutManager(context)
             adapter = searchAdapter
             setHasFixedSize(true)
             itemAnimator = DefaultItemAnimator()

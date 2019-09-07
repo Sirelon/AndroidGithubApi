@@ -1,8 +1,6 @@
 package com.sirelon.githubapi.feature.search
 
-import androidx.annotation.WorkerThread
 import com.sirelon.githubapi.feature.repository.Repository
-import com.sirelon.githubapi.feature.repository.RepositoryDao
 import com.sirelon.githubapi.feature.search.BySort.FORKS
 import com.sirelon.githubapi.feature.search.BySort.STARS
 import com.sirelon.githubapi.feature.search.BySort.UPDATED
@@ -12,11 +10,9 @@ import com.sirelon.githubapi.feature.search.ByType.README
 import com.sirelon.githubapi.feature.search.ByType.TITLE
 
 /**
- * I Have no idea, how to name it properly =)
- *
  * Created on 2019-09-05 21:27 for GithubAPi.
  */
-class RepoRepository(private val repositoryDao: RepositoryDao, private val searchApi: SearchApi) {
+class SearchRepository(private val searchApi: SearchApi) {
 
     private val criteria: SearchCriteria = SearchCriteria("", 1, TITLE, STARS)
 
@@ -36,7 +32,6 @@ class RepoRepository(private val repositoryDao: RepositoryDao, private val searc
                 sortBy = sortParameter
             )
         val list = searchResults.result.map(ServerRepository::map)
-        repositoryDao.replaceAll(list)
         return list
     }
 
@@ -49,13 +44,6 @@ class RepoRepository(private val repositoryDao: RepositoryDao, private val searc
             OWNER -> "repo:owner/name"
         }
         return "$searchQuery+$type"
-    }
-
-    fun loadAll() = repositoryDao.loadAll()
-
-    @WorkerThread
-    suspend fun markAsViewed(item: Repository) {
-        repositoryDao.insert(item)
     }
 }
 

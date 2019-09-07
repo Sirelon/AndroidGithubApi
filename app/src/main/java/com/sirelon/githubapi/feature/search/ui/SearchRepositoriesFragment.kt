@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.sirelon.githubapi.R
 import com.sirelon.githubapi.feature.base.BaseFragment
 import com.sirelon.githubapi.feature.repository.ui.RepositoryAdapter
@@ -23,7 +23,7 @@ class SearchRepositoriesFragment : BaseFragment(R.layout.fragment_search_reposit
 
         val searchAdapter = RepositoryAdapter(viewModel::markAsViewed)
         with(repositoriesList) {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = GridLayoutManager(context, 2)
             adapter = searchAdapter
             setHasFixedSize(true)
             itemAnimator = DefaultItemAnimator()

@@ -6,21 +6,25 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.sirelon.githubapi.feature.base.BaseViewModel
+import com.sirelon.githubapi.feature.repository.RepoRepository
 import com.sirelon.githubapi.feature.repository.Repository
-import com.sirelon.githubapi.feature.search.RepoRepository
+import com.sirelon.githubapi.feature.search.SearchRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
  * Created on 2019-09-05 21:29 for GithubAPi.
  */
-class SearchRepoViewModel(private val repository: RepoRepository) : BaseViewModel() {
+class SearchRepoViewModel(
+    private val searchRepository: SearchRepository,
+    private val itemsRepository: RepoRepository
+) : BaseViewModel() {
 
     private val searchTrigger = MutableLiveData<String>()
-    //    val repositoryListLiveData = repository.loadAll()
+    //    val repositoryListLiveData = searchRepository.loadAll()
     val repositoryListLiveData: LiveData<List<Repository>> = searchTrigger.switchMap {
         liveData<List<Repository>>(Dispatchers.IO) {
-            val result = runCatching { repository.searchRepositories(it) }
+            val result = runCatching { searchRepository.searchRepositories(it) }
             val list = result.getOrNull()
             if (list != null) {
                 emit(list)
@@ -38,7 +42,7 @@ class SearchRepoViewModel(private val repository: RepoRepository) : BaseViewMode
 
 //        viewModelScope.launch {
 //            val result = withContext(Dispatchers.IO) {
-//                runCatching { repository.searchRepositories(string) }
+//                runCatching { searchRepository.searchRepositories(string) }
 //            }
 //
 //            result.exceptionOrNull()?.let(this@SearchRepoViewModel::onError)
@@ -47,7 +51,7 @@ class SearchRepoViewModel(private val repository: RepoRepository) : BaseViewMode
 
     fun markAsViewed(item: Repository) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.markAsViewed(item)
+            itemsRepository.markAsViewed(item)
         }
     }
 }
