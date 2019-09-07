@@ -21,7 +21,7 @@ class SearchRepositoriesFragment : BaseFragment(R.layout.fragment_search_reposit
 
         subsribeForErrors(viewModel)
 
-        val searchAdapter = RepositoryAdapter()
+        val searchAdapter = RepositoryAdapter(viewModel::markAsViewed)
         with(repositoriesList) {
             layoutManager = LinearLayoutManager(context)
             adapter = searchAdapter

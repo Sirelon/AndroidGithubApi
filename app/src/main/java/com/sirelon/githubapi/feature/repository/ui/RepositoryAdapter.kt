@@ -14,7 +14,8 @@ import kotlinx.android.synthetic.main.item_repository.*
 /**
  * Created on 2019-09-05 22:09 for GithubAPi.
  */
-class RepositoryAdapter : ListAdapter<Repository, RepositoryAdapter.ViewHolder>(DiffCallback) {
+class RepositoryAdapter(private val onItemClick: (repo: Repository) -> Unit) :
+    ListAdapter<Repository, RepositoryAdapter.ViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(parent.inflate(R.layout.item_repository))
@@ -22,6 +23,7 @@ class RepositoryAdapter : ListAdapter<Repository, RepositoryAdapter.ViewHolder>(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val repo = getItem(position)
         with(holder) {
+            itemView.setOnClickListener { onItemClick(repo) }
             repoName.text = repo.name
             repoDescription.text = repo.description
             repoStars.text = "${repo.starCount}"
