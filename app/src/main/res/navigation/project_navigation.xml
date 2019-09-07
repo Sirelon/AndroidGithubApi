@@ -9,17 +9,17 @@
         android:id="@+id/navigation_search_repo"
         android:name="com.sirelon.githubapi.feature.search.ui.SearchRepositoriesFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_search_repositories" >
+        tools:layout="@layout/fragment_search_repositories">
         <action
             android:id="@+id/action_navigation_home_to_authActivity"
             app:destination="@id/authActivity" />
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.sirelon.githubapi.feature.ui.dashboard.DashboardFragment"
+        android:id="@+id/navigation_saved_items"
+        android:name="com.sirelon.githubapi.feature.saved.SavedItemsFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_saved_items" />
     <activity
         android:id="@+id/authActivity"
         android:name="com.sirelon.githubapi.feature.auth.AuthActivity"

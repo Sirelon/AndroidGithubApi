@@ -12,5 +12,6 @@ data class Repository(
     val id: Long,
     val name: String,
     val description: String,
-    val starCount: Int
+    val starCount: Int,
+    val url: String
 )

@@ -18,8 +18,6 @@ import com.sirelon.githubapi.feature.search.ByType.TITLE
  */
 class RepoRepository(private val repositoryDao: RepositoryDao, private val searchApi: SearchApi) {
 
-    fun loadAll() = repositoryDao.loadAll()
-
     private val criteria: SearchCriteria = SearchCriteria("", 1, TITLE, STARS)
 
     suspend fun searchRepositories(query: String): List<Repository> {
@@ -53,6 +51,8 @@ class RepoRepository(private val repositoryDao: RepositoryDao, private val searc
         return "$searchQuery+$type"
     }
 
+    fun loadAll() = repositoryDao.loadAll()
+
     @WorkerThread
     suspend fun markAsViewed(item: Repository) {
         repositoryDao.insert(item)
@@ -60,4 +60,4 @@ class RepoRepository(private val repositoryDao: RepositoryDao, private val searc
 }
 
 fun ServerRepository.map() =
-    Repository(id = id, name = name, description = description, starCount = countOfStars)
+    Repository(id = id, name = name, description = description, starCount = countOfStars, url = url)

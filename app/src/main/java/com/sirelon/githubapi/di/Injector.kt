@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.sirelon.githubapi.database.AppDataBase
 import com.sirelon.githubapi.feature.auth.AppSession
 import com.sirelon.githubapi.feature.auth.AuthAPI
+import com.sirelon.githubapi.feature.saved.SavedItemsViewModel
 import com.sirelon.githubapi.feature.search.RepoRepository
 import com.sirelon.githubapi.feature.search.SearchApi
 import com.sirelon.githubapi.feature.search.ui.SearchRepoViewModel
@@ -35,10 +36,10 @@ object Injector {
                 listOf(
                     commonModule(),
                     repositoryModule(),
-                    searchModule()
+                    searchModule(),
+                    viewedRepositoriesModule()
                 )
             )
-
         }
     }
 
@@ -78,5 +79,9 @@ object Injector {
         single { get<Retrofit>().create(SearchApi::class.java) }
         factory { RepoRepository(get(), get()) }
         viewModel { SearchRepoViewModel(get()) }
+    }
+
+    private fun viewedRepositoriesModule() = module {
+        viewModel { SavedItemsViewModel(get()) }
     }
 }
