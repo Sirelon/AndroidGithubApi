@@ -1,4 +1,4 @@
-package com.sirelon.githubapi.feature.repository.ui
+package com.sirelon.githubapi.feature.search.ui
 
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +14,10 @@ import kotlinx.android.synthetic.main.item_repository.*
 /**
  * Created on 2019-09-05 22:09 for GithubAPi.
  */
-class RepositoryAdapter(private val onItemClick: (repo: Repository) -> Unit) :
-    ListAdapter<Repository, RepositoryAdapter.ViewHolder>(DiffCallback) {
+class SearchRepositoryAdapter(private val onItemClick: (repo: Repository) -> Unit) :
+    ListAdapter<Repository, SearchRepositoryAdapter.ViewHolder>(
+        DiffCallback
+    ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(parent.inflate(R.layout.item_repository))
@@ -32,12 +34,11 @@ class RepositoryAdapter(private val onItemClick: (repo: Repository) -> Unit) :
 
     class ViewHolder(override val containerView: View) : LayoutContainer,
         RecyclerView.ViewHolder(containerView)
-
 }
 
 private object DiffCallback : DiffUtil.ItemCallback<Repository>() {
     override fun areItemsTheSame(oldItem: Repository, newItem: Repository): Boolean =
-        oldItem === newItem
+        oldItem == newItem
 
     override fun areContentsTheSame(oldItem: Repository, newItem: Repository): Boolean =
         oldItem == newItem

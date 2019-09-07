@@ -13,5 +13,7 @@ data class Repository(
     val name: String,
     val description: String,
     val starCount: Int,
-    val url: String
+    val url: String,
+
+    val priority: Int = 0
 )

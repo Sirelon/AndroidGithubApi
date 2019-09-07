@@ -52,15 +52,15 @@ object Injector {
 
         single { createSimpleRetrofit(androidContext(), get(), getProperty(BASE_URL)) }
         single {
-            Room.inMemoryDatabaseBuilder(
-                androidContext(),
-                AppDataBase::class.java
-            ).build()
-//            Room.databaseBuilder(
+//            Room.inMemoryDatabaseBuilder(
 //                androidContext(),
-//                AppDataBase::class.java,
-//                ".githubApiDatabase"
+//                AppDataBase::class.java
 //            ).build()
+            Room.databaseBuilder(
+                androidContext(),
+                AppDataBase::class.java,
+                ".githubApiDatabase"
+            ).build()
         }
 
         factory { get<Retrofit>().create(AuthAPI::class.java) }

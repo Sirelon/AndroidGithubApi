@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sirelon.githubapi.R
 import com.sirelon.githubapi.feature.base.BaseFragment
-import com.sirelon.githubapi.feature.repository.ui.RepositoryAdapter
 import com.sirelon.githubapi.utils.onTextChange
 import kotlinx.android.synthetic.main.fragment_search_repositories.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -21,7 +20,8 @@ class SearchRepositoriesFragment : BaseFragment(R.layout.fragment_search_reposit
 
         subsribeForErrors(viewModel)
 
-        val searchAdapter = RepositoryAdapter(viewModel::markAsViewed)
+        val searchAdapter =
+            SearchRepositoryAdapter(viewModel::markAsViewed)
         with(repositoriesList) {
             layoutManager = GridLayoutManager(context, 2)
             adapter = searchAdapter

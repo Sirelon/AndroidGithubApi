@@ -1,6 +1,7 @@
 package com.sirelon.githubapi.utils
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.text.Editable
@@ -8,6 +9,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 
 
@@ -45,4 +47,12 @@ fun Activity.openBrowser(url: String) {
     val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
     // Cases, when device doesn't have any browser.
     runCatching { startActivity(browserIntent) }
+}
+
+
+fun Activity.hideKeyboard() {
+    val focus = currentFocus
+    val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(focus?.windowToken, 0)
+    focus?.clearFocus()
 }

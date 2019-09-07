@@ -18,4 +18,9 @@ class RepoRepository(private val repositoryDao: RepositoryDao) {
         repositoryDao.insert(item)
     }
 
+    @WorkerThread
+    suspend fun remove(repository: Repository) {
+        repositoryDao.delete(repository)
+    }
+
 }

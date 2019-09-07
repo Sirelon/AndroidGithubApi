@@ -13,7 +13,7 @@ interface RepositoryDao : CommonDao<Repository> {
 //    @Query("SELECT * FROM repository WHERE name")
 //    fun searchRepositories(query: String)
 
-    @Query("SELECT * FROM repository ORDER BY starCount")
+    @Query("SELECT * FROM repository ORDER BY starCount, priority ASC")
     fun loadAll(): LiveData<List<Repository>>
 
 }
