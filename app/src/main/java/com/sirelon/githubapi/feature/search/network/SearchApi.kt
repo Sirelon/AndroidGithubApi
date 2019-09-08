@@ -1,12 +1,14 @@
 package com.sirelon.githubapi.feature.search.network
 
 import androidx.annotation.IntRange
+import androidx.annotation.Keep
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 /**
  * Created on 2019-09-05 21:03 for GithubAPi.
  */
+@Keep
 interface SearchApi {
 
     @GET("/search/repositories")

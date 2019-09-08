@@ -1,10 +1,12 @@
 package com.sirelon.githubapi.feature.search.network
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
 /**
  * Created on 2019-09-05 21:09 for GithubAPi.
  */
+@Keep
 class ServerSearchResults(
     @SerializedName("total_count")
     val count: Int,
@@ -12,6 +14,7 @@ class ServerSearchResults(
     val result: List<ServerRepository>
 )
 
+@Keep
 class ServerRepository(
     @SerializedName("id")
     val id: Long,
