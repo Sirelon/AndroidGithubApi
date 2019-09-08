@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.paging.DataSource
 import androidx.paging.PositionalDataSource
 import com.sirelon.githubapi.feature.repository.Repository
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 /**
@@ -12,9 +12,9 @@ import kotlinx.coroutines.launch
  */
 class SearchDataSourceFactory(
     private val searchRepository: SearchRepository,
-    private val onError: (error: Throwable) -> Unit
-) :
-    DataSource.Factory<Int, Repository>() {
+    // In case of exception in coroutine scope, it will be recreated
+    private var coroutineScope: CoroutineScope
+) : DataSource.Factory<Int, Repository>() {
 
     private val searchCriteria: SearchCriteria = SearchCriteria("", 1, ByType.TITLE, BySort.STARS)
 
@@ -32,21 +32,20 @@ class SearchDataSourceFactory(
     }
 
     private fun dataSource(searchRepository: SearchRepository, searchCriteria: SearchCriteria) =
-        SearchGroupDataSource(searchRepository, searchCriteria, onError)
+        SearchGroupDataSource(searchRepository, searchCriteria, coroutineScope)
 }
 
 class SearchGroupDataSource(
     private val searchRepository: SearchRepository,
     private val searchCriteria: SearchCriteria,
-    private val onError: (error: Throwable) -> Unit
+    private val coroutineScope: CoroutineScope
 ) : PositionalDataSource<Repository>() {
 
     override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<Repository>) {
         changeCriteria(params.startPosition, params.loadSize)
 
         Log.i("Sirelon", "loadRange ${searchCriteria.page}")
-        // TODO
-        GlobalScope.launch {
+        coroutineScope.launch {
             val list = searchRepository.searchByCriteria(searchCriteria)
             callback.onResult(list)
         }
@@ -55,8 +54,7 @@ class SearchGroupDataSource(
     override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<Repository>) {
         changeCriteria(params.requestedStartPosition, params.pageSize)
         Log.i("Sirelon", "loadInitial ${searchCriteria.page}")
-        // TODO
-        GlobalScope.launch {
+        coroutineScope.launch {
             val list = searchRepository.searchByCriteria(searchCriteria)
             callback.onResult(list, 0)
         }

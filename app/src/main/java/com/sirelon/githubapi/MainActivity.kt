@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == ITEM_ID) {
+
             AlertDialog.Builder(this).setMessage("Are you sure?")
                 .setPositiveButton("Yes") { _, _ -> logout() }
                 .setNegativeButton("No", null)
