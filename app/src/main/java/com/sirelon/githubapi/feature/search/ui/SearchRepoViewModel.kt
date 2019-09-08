@@ -28,9 +28,10 @@ class SearchRepoViewModel(
     private val itemsRepository: RepoRepository
 ) : BaseViewModel() {
 
-    private val searchQueryChannel: SendChannel<String>
-
     val repositoryListLiveData: LiveData<PagedList<Repository>>
+
+    // to this channel will be posted typed by user keywords for search
+    private val searchKeywordChannel: SendChannel<String>
 
     // This Job used for stopping search. I pass it to pagination datasource, where on scope of this job api would be called.
     // And if this job would be cancelled, all its children will be cancelled as well.
@@ -62,10 +63,12 @@ class SearchRepoViewModel(
         // Create LiveData with congif and datasource
         repositoryListLiveData = LivePagedListBuilder(dataSourceFactory, pagedListConfig).build()
 
-        searchQueryChannel = Channel(Channel.CONFLATED)
+        searchKeywordChannel = Channel(Channel.CONFLATED)
 
+        // Listening all typed strings
         viewModelScope.launch {
-            searchQueryChannel
+            searchKeywordChannel
+                // this is util method, which use "window" mechanism: collect all items, which were passed by some time, and post back only the most recent
                 .throttle()
                 .consumeEach { dataSourceFactory.update(it) }
         }
@@ -74,8 +77,8 @@ class SearchRepoViewModel(
     fun onSearchTyped(string: String?) {
         string ?: return
 
-        // Non blocking
-        searchQueryChannel.offer(string)
+        // Non blocking. Post to channel
+        searchKeywordChannel.offer(string)
     }
 
     fun markAsViewed(item: Repository) {
@@ -94,6 +97,6 @@ class SearchRepoViewModel(
 
         Log.i("Sirelon", "SearchRepo: Oncleared")
         stopSearch()
-        searchQueryChannel.close()
+        searchKeywordChannel.close()
     }
 }

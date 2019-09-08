@@ -10,7 +10,7 @@ private const val TOKEN_KEY = ".token"
 
 // I don't want to make it as singleton object,
 // 'cause in future this class can be replaced to interface and than it will be more safety way to change logic for app session
-class AppSession(private val context: Context) {
+class AppSession(context: Context) {
 
     private val sharedPreferences: SharedPreferences
 

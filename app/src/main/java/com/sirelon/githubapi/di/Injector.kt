@@ -7,8 +7,8 @@ import com.sirelon.githubapi.feature.auth.AppSession
 import com.sirelon.githubapi.feature.auth.AuthAPI
 import com.sirelon.githubapi.feature.repository.RepoRepository
 import com.sirelon.githubapi.feature.saved.SavedItemsViewModel
-import com.sirelon.githubapi.feature.search.network.SearchApi
 import com.sirelon.githubapi.feature.search.SearchRepository
+import com.sirelon.githubapi.feature.search.network.SearchApi
 import com.sirelon.githubapi.feature.search.ui.SearchRepoViewModel
 import com.sirelon.githubapi.network.createSimpleRetrofit
 import org.koin.android.ext.koin.androidContext
@@ -52,10 +52,6 @@ object Injector {
 
         single { createSimpleRetrofit(androidContext(), get(), getProperty(BASE_URL)) }
         single {
-//            Room.inMemoryDatabaseBuilder(
-//                androidContext(),
-//                AppDataBase::class.java
-//            ).build()
             Room.databaseBuilder(
                 androidContext(),
                 AppDataBase::class.java,

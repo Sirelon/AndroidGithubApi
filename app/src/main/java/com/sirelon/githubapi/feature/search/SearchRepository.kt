@@ -137,7 +137,7 @@ class SearchRepository(private val searchApi: SearchApi) {
             README -> "in:readme"
             OWNER -> "repo:owner/name"
         }
-        return "$searchQuery+$type"
+        return "$keyword+$type"
     }
 }
 

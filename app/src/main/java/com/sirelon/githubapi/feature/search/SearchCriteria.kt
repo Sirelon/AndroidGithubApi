@@ -5,7 +5,7 @@ package com.sirelon.githubapi.feature.search
  */
 // Mutable
 data class SearchCriteria(
-    var searchQuery: String,
+    var keyword: String,
     var page: Int,
     val type: ByType,
     val sort: BySort
@@ -13,9 +13,6 @@ data class SearchCriteria(
     //
     var pageLimit: Int = 15
 }
-
-fun SearchCriteria.page(page: Int) = apply { this.page = page }
-fun SearchCriteria.query(query: String) = apply { this.searchQuery = query }
 
 enum class ByType {
     TITLE, DESCRIPTION, README, OWNER

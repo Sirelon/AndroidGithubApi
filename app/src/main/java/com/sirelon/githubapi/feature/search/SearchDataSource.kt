@@ -16,26 +16,27 @@ class SearchDataSourceFactory(
     private var coroutineScope: CoroutineScope
 ) : DataSource.Factory<Int, Repository>() {
 
-    private val searchCriteria: SearchCriteria = SearchCriteria("", 1, ByType.TITLE, BySort.STARS)
+    // First, we will show repositories by android keyword:)
+    private val searchCriteria: SearchCriteria = SearchCriteria("Android", 1, ByType.TITLE, BySort.STARS)
 
     private var dataSource = dataSource(searchRepository, searchCriteria)
 
     override fun create(): DataSource<Int, Repository> = dataSource
 
-    fun update(search: String) {
+    fun update(keyword: String) {
         // Not need to invalidate if query params the same
-        if (search == searchCriteria.searchQuery) return
+        if (keyword == searchCriteria.keyword) return
 
         dataSource.invalidate()
         dataSource =
-            dataSource(searchRepository, searchCriteria.copy(searchQuery = search, page = 0))
+            dataSource(searchRepository, searchCriteria.copy(keyword = keyword, page = 0))
     }
 
     private fun dataSource(searchRepository: SearchRepository, searchCriteria: SearchCriteria) =
         SearchGroupDataSource(searchRepository, searchCriteria, coroutineScope)
 }
 
-class SearchGroupDataSource(
+private class SearchGroupDataSource(
     private val searchRepository: SearchRepository,
     private val searchCriteria: SearchCriteria,
     private val coroutineScope: CoroutineScope

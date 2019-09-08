@@ -4,15 +4,19 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.observe
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionManager
+import com.sirelon.githubapi.R
 import com.sirelon.githubapi.feature.base.BaseFragment
 import com.sirelon.githubapi.feature.repository.ui.SavedRepositoryAdapter
 import com.sirelon.githubapi.utils.hideKeyboard
 import com.sirelon.githubapi.utils.openBrowser
-import kotlinx.android.synthetic.main.fragment_search_repositories.*
+import kotlinx.android.synthetic.main.fragment_saved_items.*
+import kotlinx.android.synthetic.main.fragment_search_repositories.repositoriesList
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.abs
 
@@ -43,7 +47,17 @@ class SavedItemsFragment : BaseFragment(com.sirelon.githubapi.R.layout.fragment_
             itemTouchHelper.attachToRecyclerView(this)
         }
 
-        viewModel.allRepositories.observe(this, savedAdapter::submitList)
+        emptyView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.navigation_search_repo))
+
+        viewModel.allRepositories.observe(this) {
+            TransitionManager.beginDelayedTransition(savedRoot)
+            if (it.isEmpty()) {
+                emptyView.visibility = View.VISIBLE
+            } else {
+                emptyView.visibility = View.GONE
+            }
+            savedAdapter.submitList(it)
+        }
     }
 
     private fun createItemTouchCallback(): ItemTouchHelper.SimpleCallback {
