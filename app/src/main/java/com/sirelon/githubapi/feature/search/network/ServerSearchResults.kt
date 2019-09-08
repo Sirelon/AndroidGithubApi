@@ -1,4 +1,4 @@
-package com.sirelon.githubapi.feature.search
+package com.sirelon.githubapi.feature.search.network
 
 import com.google.gson.annotations.SerializedName
 

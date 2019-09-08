@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sirelon.githubapi.feature.base.BaseFragment
-import com.sirelon.githubapi.feature.search.ui.SearchRepositoryAdapter
+import com.sirelon.githubapi.feature.repository.ui.SavedRepositoryAdapter
 import com.sirelon.githubapi.utils.hideKeyboard
 import com.sirelon.githubapi.utils.openBrowser
 import kotlinx.android.synthetic.main.fragment_search_repositories.*
@@ -20,7 +20,7 @@ import kotlin.math.abs
 class SavedItemsFragment : BaseFragment(com.sirelon.githubapi.R.layout.fragment_saved_items) {
 
     private val viewModel by viewModel<SavedItemsViewModel>()
-    private val searchAdapter = SearchRepositoryAdapter {
+    private val savedAdapter = SavedRepositoryAdapter {
         activity?.openBrowser(it.url)
     }
 
@@ -33,7 +33,7 @@ class SavedItemsFragment : BaseFragment(com.sirelon.githubapi.R.layout.fragment_
 
         with(repositoriesList) {
             layoutManager = LinearLayoutManager(context)
-            adapter = searchAdapter
+            adapter = savedAdapter
             setHasFixedSize(true)
             itemAnimator = DefaultItemAnimator()
 
@@ -43,7 +43,7 @@ class SavedItemsFragment : BaseFragment(com.sirelon.githubapi.R.layout.fragment_
             itemTouchHelper.attachToRecyclerView(this)
         }
 
-        viewModel.allRepositories.observe(this, searchAdapter::submitList)
+        viewModel.allRepositories.observe(this, savedAdapter::submitList)
     }
 
     private fun createItemTouchCallback(): ItemTouchHelper.SimpleCallback {
@@ -59,7 +59,7 @@ class SavedItemsFragment : BaseFragment(com.sirelon.githubapi.R.layout.fragment_
             ): Boolean {
 
                 val position = viewHolder.adapterPosition
-                val currentList = searchAdapter.currentList.toMutableList()
+                val currentList = savedAdapter.currentList.toMutableList()
                 val item = currentList.getOrNull(position) ?: return false
 
                 val positionTarget = target.adapterPosition
@@ -68,13 +68,13 @@ class SavedItemsFragment : BaseFragment(com.sirelon.githubapi.R.layout.fragment_
                 //FIXME: Incorect reording when drag fast
                 currentList[position] = itemTarget
                 currentList[positionTarget] = item
-                searchAdapter.submitList(currentList)
+                savedAdapter.submitList(currentList)
                 return true
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                val item = searchAdapter.currentList.getOrNull(position) ?: return
+                val item = savedAdapter.currentList.getOrNull(position) ?: return
                 viewModel.removeItem(item)
                 // TODO: Show some snackbar with "undo"
             }
@@ -85,7 +85,7 @@ class SavedItemsFragment : BaseFragment(com.sirelon.githubapi.R.layout.fragment_
             ) {
                 super.clearView(recyclerView, viewHolder)
                 // Here we will update ordering on database
-                viewModel.updatePriorityForList(searchAdapter.currentList)
+                viewModel.updatePriorityForList(savedAdapter.currentList)
             }
 
             override fun onChildDraw(

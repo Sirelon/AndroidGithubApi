@@ -18,7 +18,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
-
 private const val ITEM_ID = 1231;
 
 class MainActivity : AppCompatActivity() {

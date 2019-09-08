@@ -11,7 +11,7 @@ data class SearchCriteria(
     val sort: BySort
 ) {
     //
-    val pageLimit: Int = 15
+    var pageLimit: Int = 15
 }
 
 fun SearchCriteria.page(page: Int) = apply { this.page = page }

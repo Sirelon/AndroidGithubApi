@@ -45,6 +45,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeCycleVer"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifeCycleVer"
 
+    // Paging
+    implementation "androidx.paging:paging-runtime-ktx:2.1.0"
+
     // Navigation
     def navVer = '2.1.0'
     implementation "androidx.navigation:navigation-fragment-ktx:$navVer"

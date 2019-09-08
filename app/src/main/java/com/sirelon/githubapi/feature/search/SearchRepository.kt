@@ -9,6 +9,8 @@ import com.sirelon.githubapi.feature.search.ByType.DESCRIPTION
 import com.sirelon.githubapi.feature.search.ByType.OWNER
 import com.sirelon.githubapi.feature.search.ByType.README
 import com.sirelon.githubapi.feature.search.ByType.TITLE
+import com.sirelon.githubapi.feature.search.network.SearchApi
+import com.sirelon.githubapi.feature.search.network.ServerRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -17,22 +19,32 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.zip
 
 /**
  * Created on 2019-09-05 21:27 for GithubAPi.
  */
-class SearchRepository(private val searchApi: SearchApi) {
+// just debug flag for which approach to use: flow or simple suspend methods with async
+private const val SEARCH_VIA_FLOW = true
 
-    private val criteria: SearchCriteria = SearchCriteria("", 1, TITLE, STARS)
+class SearchRepository(private val searchApi: SearchApi) {
 
     // enter on terminal to see logs "adb shell setprop log.tag.Sirelon VERBOSE"
     private val timings = TimingLogger("Sirelon", "Measure Different Approaches")
 
-    fun searchViaFlows(query: String): Flow<List<Repository>> {
+    // I need to handle errors, so choose how need to load data is here, in ViewModel, not in repository
+    suspend fun searchByCriteria(criteria: SearchCriteria): List<Repository> {
+        return if (SEARCH_VIA_FLOW) {
+            searchViaFlows(criteria).single()
+        } else {
+            searchViaAsync(criteria)
+        }
+    }
+
+    private fun searchViaFlows(criteria: SearchCriteria): Flow<List<Repository>> {
         timings.reset()
 
-        criteria.query(query)
         val byDescriptionFlow = callApiFlow(criteria.copy(type = DESCRIPTION))
             .onStart { timings.addSplit("DESCRIPTION:onStart") }
             .onCompletion() { timings.addSplit("DESCRIPTION:onComplete") }
@@ -49,11 +61,10 @@ class SearchRepository(private val searchApi: SearchApi) {
             .flowOn(Dispatchers.IO)
     }
 
-    suspend fun searchViaAsync(query: String): List<Repository> {
+    private suspend fun searchViaAsync(criteria: SearchCriteria): List<Repository> {
         timings.reset()
         timings.addSplit("DESCRIPTION_NAME:onStart")
 
-        criteria.query(query)
         return coroutineScope {
             val listByNameDeffered = async { callApi(criteria) }
             val listByDescriptionDeffered = async { callApi(criteria.copy(type = DESCRIPTION)) }
@@ -115,7 +126,6 @@ class SearchRepository(private val searchApi: SearchApi) {
                 sortBy = sortParameter
             )
         val list = searchResults.result.map(ServerRepository::map)
-
         return list
     }
 

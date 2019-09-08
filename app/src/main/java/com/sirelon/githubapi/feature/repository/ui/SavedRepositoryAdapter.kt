@@ -1,9 +1,9 @@
-package com.sirelon.githubapi.feature.search.ui
+package com.sirelon.githubapi.feature.repository.ui
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sirelon.githubapi.R
 import com.sirelon.githubapi.feature.repository.Repository
@@ -14,8 +14,8 @@ import kotlinx.android.synthetic.main.item_repository.*
 /**
  * Created on 2019-09-05 22:09 for GithubAPi.
  */
-class SearchRepositoryAdapter(private val onItemClick: (repo: Repository) -> Unit) :
-    PagedListAdapter<Repository, SearchRepositoryAdapter.ViewHolder>(DiffCallback) {
+class SavedRepositoryAdapter(private val onItemClick: (repo: Repository) -> Unit) :
+    ListAdapter<Repository, SavedRepositoryAdapter.ViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(parent.inflate(R.layout.item_repository))

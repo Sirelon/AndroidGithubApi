@@ -18,12 +18,34 @@ import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.coroutineContext
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 
 /**
  * Created on 2019-09-05 22:12 for GithubAPi.
  */
+
+/**
+ * Util function for
+ */
+suspend fun <T> Flow<T>.toSuspend(): T {
+    val scope = CoroutineScope(coroutineContext)
+    return suspendCancellableCoroutine<T> { continuation ->
+        catch { continuation.resumeWithException(it) }
+            .onEach { continuation.resume(it) }
+            .launchIn(scope)
+    }
+}
+
+
 /**
  * A util function, that make throttle possible on Channel.
  */

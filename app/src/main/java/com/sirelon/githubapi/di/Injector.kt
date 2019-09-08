@@ -7,7 +7,7 @@ import com.sirelon.githubapi.feature.auth.AppSession
 import com.sirelon.githubapi.feature.auth.AuthAPI
 import com.sirelon.githubapi.feature.repository.RepoRepository
 import com.sirelon.githubapi.feature.saved.SavedItemsViewModel
-import com.sirelon.githubapi.feature.search.SearchApi
+import com.sirelon.githubapi.feature.search.network.SearchApi
 import com.sirelon.githubapi.feature.search.SearchRepository
 import com.sirelon.githubapi.feature.search.ui.SearchRepoViewModel
 import com.sirelon.githubapi.network.createSimpleRetrofit
